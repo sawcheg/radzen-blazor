@@ -1,24 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
   <PropertyGroup>
     <NoWarn>BL9993</NoWarn>
-    <TargetFrameworks>netstandard2.1;net5.0;net6.0</TargetFrameworks>
-    <RazorLangVersion>3.0</RazorLangVersion>
-    <LangVersion>7.3</LangVersion>
+    <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
-    <PackageId>Radzen.Blazor</PackageId>
-    <Product>Radzen.Blazor</Product>
-    <Version>4.2.3</Version>
-    <Copyright>Radzen Ltd.</Copyright>
-    <Authors>Radzen Ltd.</Authors>
-    <Description>Radzen Blazor is a set of 70+ free native Blazor UI controls packed with DataGrid, Scheduler, Charts and robust theming including Material design and Fluent UI.</Description>
-    <PackageTags>blazor material design fluent fluentui components datagrid scheduler charts</PackageTags>
+    <PackageId>Radzen.Blazor.Extended</PackageId>
+    <Product>Radzen.Blazor.Extended</Product>
+    <Authors>Solovey Alexander</Authors>
+    <Description>Extended version of Radzen.Blazor dll with custom features.</Description>
+    <PackageTags>blazor components</PackageTags>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageProjectUrl>https://www.radzen.com</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/sawcheg/radzen-blazor.git</PackageProjectUrl>
+	<RepositoryUrl>https://github.com/sawcheg/radzen-blazor.git</RepositoryUrl>
     <PackageIcon>icon.png</PackageIcon>
-    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <Title>Radzen Components for Blazor</Title>
-    <RepositoryUrl>https://github.com/radzenhq/radzen-blazor</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Title>Extended version of Radzen Components for Blazor</Title>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
@@ -32,9 +28,7 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.12" />
   </ItemGroup>
-
   <ItemGroup>
-    <None Include="LICENSE.txt" Pack="true" PackagePath="" />
     <None Include="icon.png" Pack="true" PackagePath="" />
 	<None Include="README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
