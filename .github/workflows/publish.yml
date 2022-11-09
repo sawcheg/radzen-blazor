@@ -37,13 +37,10 @@ jobs:
       with:
         dotnet-version: |
          5.0.x
-         6.0.x
-      
-    - name: Restore dependencies
-      run: dotnet restore $SOLUTION
+         6.0.x      
 
     - name: Build
-      run: dotnet build $SOLUTION --configuration $BUILD_CONFIG -p:Version=$BUILD_VERSION --no-restore
+      run: dotnet build $SOLUTION --configuration $BUILD_CONFIG -p:Version=$BUILD_VERSION
 
     - name: Run tests
       run: dotnet test $SOLUTION --no-restore --configuration $BUILD_CONFIG --verbosity normal
