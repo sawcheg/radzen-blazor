@@ -6,10 +6,10 @@ on:
       - release/**
   push:
     branches:
-    - master
+    - custom
   pull_request:
     branches:
-    - master
+    - custom
     
 jobs:
   build:
@@ -37,7 +37,8 @@ jobs:
       with:
         dotnet-version: |
          5.0.x
-         6.0.x      
+         6.0.x   
+         7.0.x
 
     - name: Build
       run: dotnet build $SOLUTION --configuration $BUILD_CONFIG -p:Version=$BUILD_VERSION
