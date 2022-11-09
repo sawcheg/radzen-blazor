@@ -33,7 +33,9 @@ jobs:
       shell: pwsh
 
     - name: Setup NuGet.exe for use with actions
-      uses: NuGet/setup-nuget@v1.1.1     
+      uses: NuGet/setup-nuget@v1
+      with:
+          nuget-version: '6.x'
    
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
