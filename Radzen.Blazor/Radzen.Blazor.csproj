@@ -4,8 +4,6 @@
     <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
-    <PackageId>Radzen.Blazor.Extended</PackageId>
-    <Product>Radzen.Blazor.Extended</Product>
     <Authors>Solovey Alexander</Authors>
     <Description>Extended version of Radzen.Blazor dll with custom features.</Description>
     <PackageTags>blazor components</PackageTags>
@@ -14,7 +12,7 @@
 	<RepositoryUrl>https://github.com/sawcheg/radzen-blazor.git</RepositoryUrl>
     <PackageIcon>icon.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Title>Extended version of Radzen Components for Blazor</Title>
+    <Title>Custom version of Radzen Components for Blazor</Title>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
@@ -30,7 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="icon.png" Pack="true" PackagePath="" />
-	<None Include="README.md" Pack="true" PackagePath="\"/>
+	<None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,7 +39,10 @@
 
   <PropertyGroup>
     <LibSassOutputStyle>expanded</LibSassOutputStyle>
-    <EnableDefaultSassItems>false</EnableDefaultSassItems>  
+    <EnableDefaultSassItems>false</EnableDefaultSassItems>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <PackageId>Custom.$(AssemblyName)</PackageId>
+    <Product>Custom.$(AssemblyName)</Product>  
   </PropertyGroup>
 
   <ItemGroup>
@@ -50,14 +51,14 @@
 
  <Target Name="Sass" BeforeTargets="BeforeBuild" Condition="'$(TargetFramework)' == 'net6.0'">
     <PropertyGroup>
-      <_SassFileList>@(Sass->'&quot;%(FullPath)&quot;', ' ')</_SassFileList>
+      <_SassFileList>@(Sass->'"%(FullPath)"', ' ')</_SassFileList>
       <LibSassBuilderArgs>files $(_SassFileList) --outputstyle $(LibSassOutputStyle) --level $(LibSassOutputLevel)</LibSassBuilderArgs>
     </PropertyGroup>
     <Message Text="$(LibSassBuilderArgs)" Importance="$(LibSassMessageLevel)" />
     <Message Text="Converted SassFile list to argument" Importance="$(LibSassMessageLevel)" />
   </Target>
 
-  <Target Name="MoveCss" AfterTargets="AfterCompile" Condition="'$(TargetFramework)' == 'net6.0'" >
+  <Target Name="MoveCss" AfterTargets="AfterCompile" Condition="'$(TargetFramework)' == 'net6.0'">
     <ItemGroup>
         <CssFile Include="$(MSBuildProjectDirectory)/themes/*.css" />
     </ItemGroup>
