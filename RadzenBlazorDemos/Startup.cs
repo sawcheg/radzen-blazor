@@ -1,9 +1,10 @@
+global using Radzen;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RadzenBlazorDemos.Data;
-using Radzen;
 using RadzenBlazorDemos.Services;
 
 namespace RadzenBlazorDemos
