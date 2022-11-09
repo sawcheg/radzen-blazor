@@ -40,7 +40,7 @@ jobs:
          6.0.x
       
     - name: Restore dependencies
-      run: dotnet nuget restore $SOLUTION
+      run: dotnet restore $SOLUTION
 
     - name: Build
       run: dotnet build $SOLUTION --configuration $BUILD_CONFIG -p:Version=$BUILD_VERSION --no-restore
