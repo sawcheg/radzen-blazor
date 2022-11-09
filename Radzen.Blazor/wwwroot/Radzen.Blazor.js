@@ -198,7 +198,7 @@ window.Radzen = {
 
     document.body.appendChild(script);
   },
-  createMap: function (wrapper, ref, id, apiKey, zoom, center, markers, options) {
+  createMap: function (wrapper, ref, id, apiKey, zoom, center, markers) {
     var api = function () {
       var defaultView = document.defaultView;
 
@@ -226,53 +226,52 @@ window.Radzen = {
         });
       });
 
-      Radzen.updateMap(id, zoom, center, markers, options);
+      Radzen.updateMap(id, zoom, center, markers);
     });
   },
-  updateMap: function (id, zoom, center, markers, options) {
-    if (Radzen[id] && Radzen[id].instance) {
-        if (Radzen[id].instance.markers && Radzen[id].instance.markers.length) {
-            for (var i = 0; i < Radzen[id].instance.markers.length; i++) {
-                Radzen[id].instance.markers[i].setMap(null);
-            }
-        }
+  customizeMap: function(id, options) {
+      if (Radzen[id] && Radzen[id].instance) {
+          Radzen[id].instance.setOptions(options);
+      }
+  },
+  updateMap: function (id, zoom, center, markers) {
+      if (Radzen[id] && Radzen[id].instance) {
+          if (Radzen[id].instance.markers && Radzen[id].instance.markers.length) {
+              for (var i = 0; i < Radzen[id].instance.markers.length; i++) {
+                  Radzen[id].instance.markers[i].setMap(null);
+              }
+          }
+          Radzen[id].instance.markers = [];
+          const infoWindow = new google.maps.InfoWindow();
+          markers.forEach(function (m) {
+              var marker = new this.google.maps.Marker({
+                  position: m.position,
+                  title: m.title,
+                  label: m.label,
+                  icon: m.icon
+              });
+              marker.addListener('click', function (e) {
+                  Radzen[id].invokeMethodAsync('RadzenGoogleMap.OnMarkerClick', {
+                      Title: marker.title,
+                      Label: marker.label,
+                      Position: marker.position
+                  });
+                  infoWindow.close();
+                  infoWindow.setContent('<div style="color:rgb(0,0,0)">' + marker.getTitle() + '</div>');
+                  infoWindow.open(marker.getMap(), marker);
+              });
+              marker.setMap(Radzen[id].instance);
+              Radzen[id].instance.markers.push(marker);
+          });
 
-        if (markers) {
-            Radzen[id].instance.markers = [];
+          if (zoom) {
+              Radzen[id].instance.setZoom(zoom);
+          }
 
-            markers.forEach(function (m) {
-                var marker = new this.google.maps.Marker({
-                    position: m.position,
-                    title: m.title,
-                    label: m.label
-                });
-
-                marker.addListener('click', function (e) {
-                    Radzen[id].invokeMethodAsync('RadzenGoogleMap.OnMarkerClick', {
-                        Title: marker.title,
-                        Label: marker.label,
-                        Position: marker.position
-                    });
-                });
-
-                marker.setMap(Radzen[id].instance);
-
-                Radzen[id].instance.markers.push(marker);
-            });
-        }
-
-        if (zoom) {
-            Radzen[id].instance.setZoom(zoom);
-            }
-
-        if (center) {
-            Radzen[id].instance.setCenter(center);
-        }
-
-        if (options) {
-            Radzen[id].instance.setOptions(options);
-        }
-    }
+          if (center) {
+              Radzen[id].instance.setCenter(center);
+          }
+      }
   },
   destroyMap: function (id) {
     if (Radzen[id].instance) {

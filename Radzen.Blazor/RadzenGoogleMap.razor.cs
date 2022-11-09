@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -65,7 +66,28 @@ namespace Radzen.Blazor
         /// </summary>
         /// <value>The Google map options.</value>
         [Parameter]
-        public Dictionary<string, object> Options { get; set; }
+        public Dictionary<string, object> Options
+        {
+            get => mapOptions; set
+            {
+                bool toDelete = mapOptions?.Keys.Any(k => !(value?.ContainsKey(k) ?? false)) ?? false;
+                bool toInsert = value?.Keys.Any(k => !(mapOptions?.ContainsKey(k) ?? false)) ?? false;
+                needUpdate = toDelete || toInsert;
+                if (!needUpdate && value != null && mapOptions != null)
+                {
+                    foreach (var key in value.Keys.Where(k => mapOptions.ContainsKey(k)))
+                        if (!Equals(value[key], mapOptions[key]))
+                        {
+                            needUpdate = true;
+                            break;
+                        }
+                }
+                mapOptions = value;
+                if (needUpdate)
+                    InvokeAsync(StateHasChanged);
+            }
+        }
+        Dictionary<string, object> mapOptions;
 
         double zoom = 8;
         /// <summary>
@@ -84,13 +106,13 @@ namespace Radzen.Blazor
                 if (zoom != value)
                 {
                     zoom = value;
-
-                    InvokeAsync(UpdateMap);
+                    needUpdate = true;
+                    InvokeAsync(StateHasChanged);
                 }
             }
         }
 
-        GoogleMapPosition center = new GoogleMapPosition() { Lat = 0, Lng = 0 };
+        GoogleMapPosition center = new() { Lat = 0, Lng = 0 };
         /// <summary>
         /// Gets or sets the center map position.
         /// </summary>
@@ -104,20 +126,12 @@ namespace Radzen.Blazor
             }
             set
             {
-                if (!object.Equals(center, value))
+                if (!center.Equals(value))
                 {
                     center = value;
-
-                    InvokeAsync(UpdateMap);
+                    needUpdate = true;
+                    InvokeAsync(StateHasChanged);
                 }
-            }
-        }
-
-        async Task UpdateMap()
-        {
-            if (!firstRender)
-            {
-                await JSRuntime.InvokeVoidAsync("Radzen.updateMap", UniqueID, Zoom, Center);
             }
         }
 
@@ -128,7 +142,31 @@ namespace Radzen.Blazor
         [Parameter]
         public RenderFragment Markers { get; set; }
 
-        List<RadzenGoogleMapMarker> markers = new List<RadzenGoogleMapMarker>();
+        readonly List<RadzenGoogleMapMarker> markers = new();
+
+        /// <summary>
+        /// Gets or sets name or url of the cursor to display when the map is being dragged
+        /// </summary>
+        /// <value>The dragging cursor</value>
+        [Parameter]
+        [CustomJsOption("draggableCursor")]
+        public string DraggingCursor
+        {
+            get => draggingCursor;
+            set
+            {
+                if (value != draggingCursor)
+                {
+                    draggingCursor = value;
+                    mapOptionsChanged = true;
+                    InvokeAsync(StateHasChanged);
+                }
+            }
+        }
+        private string draggingCursor = string.Empty;
+
+        private bool mapOptionsChanged;
+        private bool needUpdate;
 
         /// <summary>
         /// Adds the marker.
@@ -139,6 +177,7 @@ namespace Radzen.Blazor
             if (markers.IndexOf(marker) == -1)
             {
                 markers.Add(marker);
+                needUpdate = true;
             }
         }
 
@@ -151,6 +190,7 @@ namespace Radzen.Blazor
             if (markers.IndexOf(marker) != -1)
             {
                 markers.Remove(marker);
+                needUpdate = true;
             }
         }
 
@@ -180,26 +220,36 @@ namespace Radzen.Blazor
             await MarkerClick.InvokeAsync(marker);
         }
 
-        bool firstRender = true;
-
         /// <inheritdoc />
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await base.OnAfterRenderAsync(firstRender);
-
-            this.firstRender = firstRender;
-
-            var data = Data != null ? Data : markers;
-
+            var data = Data ?? markers;
+            var markersForUpdate = data.Where(m => m.ParamsChanged).ToList();
+            var dataMarkers = data.Select(m => new { m.Title, m.Label, m.Position, Icon = m.IconSrc ?? string.Empty });
             if (firstRender)
             {
-                await JSRuntime.InvokeVoidAsync("Radzen.createMap", Element, Reference, UniqueID, ApiKey, Zoom, Center,
-                     data.Select(m => new { Title = m.Title, Label = m.Label, Position = m.Position }), Options);
+                await JSRuntime.InvokeVoidAsync("Radzen.createMap", Element, Reference, UniqueID, ApiKey, Zoom, Center, dataMarkers);
             }
-            else
+            else if (markersForUpdate.Any() || needUpdate)
             {
-                await JSRuntime.InvokeVoidAsync("Radzen.updateMap", UniqueID, null, null,
-                             data.Select(m => new { Title = m.Title, Label = m.Label, Position = m.Position }), Options);
+                await JSRuntime.InvokeVoidAsync("Radzen.updateMap", UniqueID, Zoom, Center, dataMarkers);
+                markersForUpdate.ForEach(m => m.ParamsChanged = false);
+                needUpdate = false;
+            }            
+            if (firstRender || mapOptionsChanged)
+            {
+                var options = GetType().GetProperties()
+                   .Where(p => Attribute.IsDefined(p, typeof(CustomJsOptionAttribute)))
+                   .Select(p => new
+                   {
+                       Name = (Attribute.GetCustomAttribute(p, typeof(CustomJsOptionAttribute)) as CustomJsOptionAttribute).PropertyName,
+                       Value = p.GetValue(this)
+                   })
+                   .ToDictionary(k => k.Name, v => v.Value);
+                if (options.Count > 0)
+                    await JSRuntime.InvokeVoidAsync("Radzen.customizeMap", UniqueID, options);
+                mapOptionsChanged = false;
             }
         }
 

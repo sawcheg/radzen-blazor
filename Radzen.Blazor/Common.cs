@@ -139,41 +139,63 @@ namespace Radzen
     /// <summary>
     /// A class that represents a <see cref="RadzenGoogleMap" /> position.
     /// </summary>
-    public class GoogleMapPosition : IEquatable<GoogleMapPosition>
+    public sealed class GoogleMapPosition : IEquatable<GoogleMapPosition>
     {
         /// <summary>
         /// Gets or sets the latitude.
         /// </summary>
         /// <value>The latitude.</value>
-        public double Lat { get; set; }
+        public double Lat
+        {
+            get => _lat; set
+            {
+                if (value != _lat)
+                {
+                    _lat = value;
+                    PositionChanged?.Invoke();
+                }
+            }
+        }
+        private double _lat;
         /// <summary>
         /// Gets or sets the longitude.
         /// </summary>
         /// <value>The longitude.</value>
-        public double Lng { get; set; }
+        public double Lng
+        {
+            get => _lng; set
+            {
+                if (value != _lng)
+                {
+                    _lng = value;
+                    PositionChanged?.Invoke();
+                }
+            }
+        }
+        private double _lng;
+        /// <summary>
+        /// Called when parameters are changed
+        /// </summary>
+        internal Action PositionChanged;
 
         /// <inheritdoc />
         public bool Equals(GoogleMapPosition other)
         {
             if (other != null)
             {
-                return this.Lat == other.Lat && this.Lng == other.Lng;
+                return Lat.Equals(other.Lat) && Lng.Equals(other.Lng);
             }
-
             return true;
         }
 
         /// <inheritdoc />
         public override bool Equals(object obj)
         {
-            return this.Equals(obj as GoogleMapPosition);
+            return Equals(obj as GoogleMapPosition);
         }
 
         /// <inheritdoc />
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+        public override int GetHashCode() => base.GetHashCode();
     }
 
     /// <summary>
