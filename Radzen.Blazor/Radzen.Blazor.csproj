@@ -42,7 +42,7 @@
   <PropertyGroup>
     <LibSassOutputStyle>expanded</LibSassOutputStyle>
     <EnableDefaultSassItems>false</EnableDefaultSassItems>
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>Custom.$(AssemblyName)</PackageId>
     <Product>Custom.$(AssemblyName)</Product>  
   </PropertyGroup>
