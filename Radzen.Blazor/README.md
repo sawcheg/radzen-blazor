@@ -1,52 +1,17 @@
-﻿## Radzen Blazor is a set of 70+ free native Blazor UI controls packed with DataGrid, Scheduler, Charts and robust theming including Material design and Fluent UI.
+﻿## About Custom.Radzen.Blazor
+This is extended version of the Radzen.Blazor library with custom functions added and original functionality preserved
 
-![Radzen Blazor Components](https://raw.githubusercontent.com/radzenhq/radzen-blazor/master/RadzenBlazorDemos/wwwroot/images/radzen-blazor-components.png)
+Currently following components have been extended(how to use - see RadzenBlazorDemos project):
+ - GoogleMap (custom icons for every marker, custom draggable cursor icon, rendering fixed)
 
-## Why choose Radzen Blazor Components?
+Added static src/href links for js, css resources
 
-### :sparkles: Free
-
-Radzen Blazor Components are open source and free for commercial use. You can install them from [nuget](https://www.nuget.org/packages/Radzen.Blazor) or build your own copy from source.
-
-Paid support is available as part of the [Radzen Professional subscription](https://www.radzen.com/pricing/).
-
-### :computer: Native
-
-The components are implemented in C# and take full advantage of the Blazor framework. They do not depend on or wrap existing JavaScript frameworks or libraries.
-
-Blazor Server and Blazor WebAssembly are fully supported.
-
-### :seedling: Growing
-
-We add new components and features on a regular basis.
-
-Short development cycle. We release as soon as new stuff is available. No more quarterly releases.
-
-## Support exceeding your expectations
-
-### :speech_balloon: Community Support
-Everybody is welcome to visit the [Radzen Community forum](https://forum.radzen.com/). Join the growing community and participate in the discussions!
-
-### :dart: Dedicated Support
-
-The Radzen team monitors the forum threads, but does not guarantee a response to every question. For guaranteed responses you may consider the dedicated support option.
-
-Dedicated support for the Radzen Blazor Components is available as part of the [Radzen Professional subscription](https://www.radzen.com/pricing/).
-
-Our flagship product [Radzen Studio](https://www.radzen.com/features/) provides tons of productivity features for Blazor developers:
-- The first in the industry WYSIWYG Blazor design time canvas
-- Scaffolding a complete CRUD applications from a database
-- Built-in security - authentication and authorization
-- Visual Studio Code and Professional support
-- Deployment to IIS and Azure
-- Dedicated support with 24 hour guaranteed response time
-
-## Get started with Radzen Blazor Components
+## Get started
 
 ### 1. Install
 
-Radzen Blazor Components are distributed as a [Radzen.Blazor nuget package](https://www.nuget.org/packages/Radzen.Blazor). You can add them to your project in one of the following ways
-- Install the package from command line by running `dotnet add package Radzen.Blazor`
+Radzen Blazor Components are distributed as a [Radzen.Blazor nuget package](https://www.nuget.org/packages/Custom.Radzen.Blazor). You can add them to your project in one of the following ways
+- Install the package from command line by running `dotnet add package Custom.Radzen.Blazor`
 - Add the project from the Visual Nuget Package Manager
 - Manually edit the .csproj file and add a project reference
 
@@ -61,12 +26,12 @@ To use a theme
 1. Pick a theme. The [online demos](https://blazor.radzen.com/colors) allow you to preview the available options via the theme dropdown located in the header. The Material theme is currently selected by default.
 1. Include the theme CSS file in your Blazor application. Open `Pages\_Layout.cshtml` (Blazor Server .NET 6+), `Pages\_Host.cshtml` (Blazor Server before .NET 6) or `wwwroot/index.html` (Blazor WebAssembly) and include the CSS file of  a theme CSS file by adding this snippet
    ```html
-   <link rel="stylesheet" href="_content/Radzen.Blazor/css/material-base.css">
+   <link rel="stylesheet" href="@RadzenResources.CssMaterialBase">
    ```
 
 To include a different theme (i.e. Standard) just change the name of the CSS file:
-```
-<link rel="stylesheet" href="_content/Radzen.Blazor/css/standard-base.css">
+```html
+<link rel="stylesheet" href="@RadzenResources.CssStandartBase">
 ```
 
 ### 4. Include Radzen.Blazor.js
@@ -74,7 +39,7 @@ To include a different theme (i.e. Standard) just change the name of the CSS fil
 Open `Pages\_Layout.cshtml` (Blazor Server .NET 6+), `Pages\_Host.cshtml` (Blazor Server before .NET 6) or `wwwroot/index.html` (Blazor WebAssembly) and include this snippet:
 
 ```html
-<script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
+<script src="@RadzenResources.JsContent"></script>
 ```
 
 ### 5. Use a component
@@ -103,3 +68,23 @@ Use any Radzen Blazor component by typing its tag name in a Blazor page e.g.
   }
 }
 ```
+
+---
+
+## About original Radzen.Blazor
+
+![Radzen Blazor Components](RadzenBlazorDemos/wwwroot/images/radzen-blazor-components.png)
+
+<h1 align="center">
+    Radzen Blazor Components
+</h1>
+
+<p align="center">
+    A set of <strong>70+ free and open source</strong> native Blazor UI controls.
+</p>
+
+<div align="center">
+
+[See Online Demos](https://blazor.radzen.com) or [Read the Docs](https://blazor.radzen.com/docs/)
+
+</div>

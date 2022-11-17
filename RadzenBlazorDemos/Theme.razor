@@ -6,7 +6,7 @@
 @code {
     bool IsPremiumTheme => ThemeService.CurrentTheme == "fluent" || ThemeService.CurrentTheme == "material-dark";
 
-    string Href => IsPremiumTheme ? $"/css/{ThemeService.CurrentTheme}-base.css" : $"_content/Radzen.Blazor/css/{ThemeService.CurrentTheme}-base.css";
+    string Href => IsPremiumTheme ? $"/css/{ThemeService.CurrentTheme}-base.css" : $"_content/{RadzenResources.PackageName}/css/{ThemeService.CurrentTheme}-base.css";
 
     protected override void OnInitialized()
     {
