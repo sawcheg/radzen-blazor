@@ -70,5 +70,20 @@ namespace Radzen.Blazor
         {
             Value = value;
         }
+        internal string GetItemId()
+        {
+            return GetId();
+        }
+
+        internal string GetItemCssClass()
+        {
+            return GetCssClass();
+        }
+
+        /// <inheritdoc />
+        protected override string GetComponentCssClass()
+        {
+            return "rz-checkbox";
+        }
     }
 }

@@ -3,7 +3,7 @@
 @{
     var rowArgs = Grid?.GroupRowAttributes(this);
 }
-<tr @attributes="@rowArgs.Item2">
+<tr class="rz-group-row" @attributes="@rowArgs.Item2">
     @if (Group.GroupDescriptor != null)
     {
         @for (var i = 0; i < GetLevel(); i++)
@@ -28,7 +28,7 @@
             }
             else if(Group.GroupDescriptor != null)
             {
-                @(Group.GroupDescriptor.GetTitle() + ": " + (Group.Data.Key ?? ""))
+                @(Group.GroupDescriptor.GetTitle() + ": " + (Group.Data.Key != null ? Group.Data.Key.ToString() : ""))
             }
         </span>
     </td>

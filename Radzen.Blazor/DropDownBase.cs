@@ -413,17 +413,20 @@ namespace Radzen
         /// <returns>System.Object.</returns>
         public object GetItemOrValueFromProperty(object item, string property)
         {
-            if (property == TextProperty && textPropertyGetter != null)
+            if (item != null)
             {
-                return textPropertyGetter(item);
-            }
-            else if (property == ValueProperty && valuePropertyGetter != null)
-            {
-                return valuePropertyGetter(item);
-            }
-            else if (property == DisabledProperty && disabledPropertyGetter != null)
-            {
-                return disabledPropertyGetter(item);
+                if (property == TextProperty && textPropertyGetter != null)
+                {
+                    return textPropertyGetter(item);
+                }
+                else if (property == ValueProperty && valuePropertyGetter != null)
+                {
+                    return valuePropertyGetter(item);
+                }
+                else if (property == DisabledProperty && disabledPropertyGetter != null)
+                {
+                    return disabledPropertyGetter(item);
+                }
             }
 
             return item;
@@ -595,7 +598,7 @@ namespace Radzen
                     //
                 }
             }
-            else if (Multiple && key == "Space")
+            else if (Multiple && key == "Enter")
             {
                 if (selectedIndex >= 0 && selectedIndex <= items.Count() - 1)
                 {

@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Radzen.Blazor
@@ -118,6 +120,22 @@ namespace Radzen.Blazor
                     await Click.InvokeAsync(eventArgs);
                 }
             }
+        }
+
+        Dictionary<string, object> getOpenEvents()
+        {
+            var events = new Dictionary<string, object>();
+
+            if (Parent.ClickToOpen || ChildContent != null)
+            {
+                events.Add("onclick", "Radzen.toggleMenuItem(this)");
+            }
+            else
+            {
+                events.Add("onclick", "Radzen.toggleMenuItem(this, event, false)");
+            }
+
+            return events;
         }
     }
 }
