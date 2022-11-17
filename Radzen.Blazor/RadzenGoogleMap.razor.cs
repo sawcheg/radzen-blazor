@@ -236,10 +236,10 @@ namespace Radzen.Blazor
                 await JSRuntime.InvokeVoidAsync("Radzen.updateMap", UniqueID, Zoom, Center, dataMarkers);
                 markersForUpdate.ForEach(m => m.ParamsChanged = false);
                 needUpdate = false;
-            }            
+            }
             if (firstRender || mapOptionsChanged)
             {
-                var options = GetType().GetProperties()
+                var propOptions = GetType().GetProperties()
                    .Where(p => Attribute.IsDefined(p, typeof(CustomJsOptionAttribute)))
                    .Select(p => new
                    {
@@ -247,6 +247,10 @@ namespace Radzen.Blazor
                        Value = p.GetValue(this)
                    })
                    .ToDictionary(k => k.Name, v => v.Value);
+
+                var options = propOptions
+                    .Concat(Options.Where(o => !propOptions.ContainsKey(o.Key)))
+                    .ToDictionary(k => k.Key, v => v.Value);
                 if (options.Count > 0)
                     await JSRuntime.InvokeVoidAsync("Radzen.customizeMap", UniqueID, options);
                 mapOptionsChanged = false;
